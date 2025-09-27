@@ -166,4 +166,6 @@ if ticker:
             st.warning("Belirtilen kriterlere uygun kombinasyon bulunamadı.")
 
         # Grafikler
-        st.subheader("📈 Grafiksel
+        st.subheader("📈 Grafiksel Analiz")
+
+
