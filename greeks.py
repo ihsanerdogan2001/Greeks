@@ -2,6 +2,38 @@ import streamlit as st
 import math
 from scipy.stats import norm
 
+import streamlit as st
+import requests
+
+st.set_page_config(page_title="Opsiyon Greeks Hesaplayıcı", layout="centered")
+st.title("📈 Opsiyon Greeks Hesaplayıcı")
+
+# Kullanıcıdan hisse kodu al
+ticker = st.text_input("Hisse Kodu (örnek: OKLO)", value="OKLO")
+
+# Alpha Vantage API ile fiyat çekme
+def get_stock_price(ticker):
+    api_key = "8R9UWHCB38LG7G8R"
+    url = f"https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol={ticker}&apikey={api_key}"
+    response = requests.get(url)
+    data = response.json()
+    try:
+        price = float(data["Global Quote"]["05. price"])
+        return price
+    except:
+        return None
+
+# Fiyatı göster
+if ticker:
+    price = get_stock_price(ticker)
+    if price:
+        st.success(f"{ticker} güncel fiyatı: ${price:.2f}")
+    else:
+        st.error("Fiyat verisi alınamadı. Hisse kodunu kontrol et veya API sınırını aşmış olabilirsin.")
+
+
+
+
 st.set_page_config(page_title="Opsiyon Greeks Hesaplayıcı", layout="centered")
 st.title("📈 Opsiyon Greeks Hesaplayıcı")
 
@@ -41,3 +73,4 @@ if st.button("Hesapla"):
     st.subheader("📊 Sonuçlar")
     for greek, value in greeks.items():
         st.write(f"**{greek}**: {value:.4f}")
+
