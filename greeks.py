@@ -1,15 +1,18 @@
+import streamlit as st
 import math
 from scipy.stats import norm
 
-def black_scholes_greeks(S, K, T, r, sigma, option_type='call'):
-    """
-    S: Hisse fiyatı
-    K: Kullanım fiyatı (strike)
-    T: Vade süresi (yıl cinsinden)
-    r: Risksiz faiz oranı
-    sigma: Volatilite (standart sapma)
-    option_type: 'call' veya 'put'
-    """
+st.set_page_config(page_title="Opsiyon Greeks Hesaplayıcı", layout="centered")
+st.title("📈 Opsiyon Greeks Hesaplayıcı")
+
+S = st.number_input("Hisse Fiyatı (S)", value=100.0)
+K = st.number_input("Kullanım Fiyatı (K)", value=100.0)
+T = st.number_input("Vade Süresi (Yıl)", value=1.0)
+r = st.number_input("Risksiz Faiz Oranı (%)", value=5.0) / 100
+sigma = st.number_input("Volatilite (%)", value=20.0) / 100
+option_type = st.selectbox("Opsiyon Türü", ["call", "put"])
+
+def calculate_greeks(S, K, T, r, sigma, option_type):
     d1 = (math.log(S / K) + (r + 0.5 * sigma ** 2) * T) / (sigma * math.sqrt(T))
     d2 = d1 - sigma * math.sqrt(T)
 
@@ -29,11 +32,12 @@ def black_scholes_greeks(S, K, T, r, sigma, option_type='call'):
         'Delta': delta,
         'Gamma': gamma,
         'Theta': theta,
-        'Vega': vega / 100,  # Genellikle % değişim için bölünür
+        'Vega': vega / 100,
         'Rho': rho / 100
     }
 
-# Örnek kullanım
-greeks = black_scholes_greeks(S=100, K=100, T=1, r=0.05, sigma=0.2, option_type='call')
-for greek, value in greeks.items():
-    print(f"{greek}: {value:.4f}")
+if st.button("Hesapla"):
+    greeks = calculate_greeks(S, K, T, r, sigma, option_type)
+    st.subheader("📊 Sonuçlar")
+    for greek, value in greeks.items():
+        st.write(f"**{greek}**: {value:.4f}")
