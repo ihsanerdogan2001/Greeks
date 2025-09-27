@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 st.set_page_config(page_title="Opsiyon Karar Destek Sistemi", layout="centered")
 st.title("📈 Opsiyon Karar Destek Sistemi")
 
-API_KEY = "8R9UWHCB38LG7G8R"
+API_KEY = "2DBWW9NM5D1S2L9P"
 r = 0.05
 sigma = 0.85
 
